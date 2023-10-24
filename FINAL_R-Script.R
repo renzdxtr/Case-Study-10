@@ -403,7 +403,13 @@ changeInForestBiodiversityByClimateChange <- function(location){
       cat("\n\nSince there is no Organization for the aforestated Forest Type in", location,
           "it has been predicted that the following species will be threatened:\n\n")
       
-      print(BiodiversityInForest(lackOrg$Forest_Type)[1])
+      affectedSpecies <- BiodiversityInLocation(location) %>%
+        left_join(BiodiversityInForest(lackOrg$Forest_Type),
+                  by = c("Species" = "Species")) %>% 
+        filter(!is.na(Habitat)) %>%
+        as.data.frame()
+      
+      print(affectedSpecies)
     }
   }
 }
